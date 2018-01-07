@@ -3,9 +3,37 @@ import { View, Text, StyleSheet, StatusBar } from "react-native";
 import Button from "../Button";
 
 class Timer extends Component {
+  componentWillReceiveProps(nextProps) {
+    const currentProps = this.props;
+    //console.log(`The current isPlaying is: ${currentProps.isPlaying} and the new isPlaying is ${nextProps.isPlaying}`)
+
+    if (!currentProps.isPlaying && nextProps.isPlaying) {
+      // start the interval
+      //console.log('start!');
+      const timerInterval = setInterval(() => {
+        currentProps.addSecond();
+      }, 1000);
+      this.setState({
+        timerInterval
+      });
+    } else if (currentProps.isPlaying && !nextProps.isPlaying) {
+      // stop the interval
+      //console.log('stop!');
+      clearInterval(this.state.timerInterval);
+    }
+  }
+
   render() {
-    //console.log(this.props);
-    const { isPlaying, elapsedTime, timerDuration, startTimer, restartTimer } = this.props;
+    console.log(this.props);
+    const {
+      isPlaying,
+      elapsedTime,
+      timerDuration,
+      startTimer,
+      restartTimer,
+      addSecond
+    } = this.props;
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle={"light-content"} />
@@ -13,9 +41,7 @@ class Timer extends Component {
           <Text style={styles.time}>25:00</Text>
         </View>
         <View style={styles.lower}>
-          {!isPlaying && (
-            <Button iconName="play-circle" onPress={startTimer} />
-          )}
+          {!isPlaying && <Button iconName="play-circle" onPress={startTimer} />}
           {isPlaying && (
             <Button iconName="stop-circle" onPress={restartTimer} />
           )}
