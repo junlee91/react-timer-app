@@ -47,6 +47,9 @@ function reducer(state = initialState, action) {
 
     case ADD_SECOND:
       return applyAddSecond(state);
+    
+    default:
+      return state;
   }
 }
 
@@ -89,7 +92,7 @@ const actionCreators = {
     addSecond
 };
 
-export default actionCreators;
+export {actionCreators};
 
 // Export Reducer
 
